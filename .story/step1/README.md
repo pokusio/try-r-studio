@@ -111,7 +111,8 @@ The piece of infrastructure we are going to deliver, is a production environment
 
 * About Cloud Storages which could be used to manage docker volumes : 
   * https://cloudinfrastructureservices.co.uk/azure-blob-storage-vs-aws-s3-which-is-better/
-* About Docker volume drivers : 
+* About Docker volume drivers :
+  * hm there's one volume driver that is not so common, let's try and do that, it's from a small cloud provider : https://netapp.io/2016/06/14/using-netapp-docker-volume-plugin-docker-compose/ 
   * Azure Storage docker volume drivers : 
     * https://github.com/Azure/azurefile-dockervolumedriver
     * https://docs.docker.com/cloud/aci-integration/#using-azure-file-share-as-volumes-in-aci-containers : here they show example how to use [the azure files docker volume driver](https://github.com/Azure/azurefile-dockervolumedriver) in Azure Container Instances (same as AWS ECS Elastic Container Services, Azure probably has the fargate project equivalent for serverless)
