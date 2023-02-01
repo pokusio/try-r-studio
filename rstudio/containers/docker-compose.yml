@@ -1,0 +1,174 @@
+# ---
+# see : https://github.com/chartbrew/chartbrew#quickstart
+version: '3.9'
+
+# Settings and configurations that are common for all R-tudio containers
+x-rstudio-common: &rstudio-common
+  image: rocker/rstudio:4.0.3
+  # container_name: rstudio
+  restart: on-failure
+  env_file: ./.env
+  expose:
+    - ${RSTUDIO_PORT}
+  environment:
+    RABBIT_NAME: ${RABBIT_NAME}
+  # build:
+      # context: oci/rstudio/
+      # dockerfile: Dockerfile
+      # args:# 
+        # # see https://ccc
+        # - POKUS_USER_UID=$POKUS_USER_UID
+        # - POKUS_USER_GID=$POKUS_USER_GID
+  # command: npm start
+  # healthcheck:
+    # test: ["CMD", "curl", "-f", "http://localhost:${RSTUDIO_PORT}/chartbrew/health/live"]
+    # interval: 30s
+    # timeout: 20s
+    # retries: 3
+
+
+########################
+########################
+########################
+########################
+
+
+services:
+  nginx:
+    image: nginx:alpine
+    container_name: nginx
+    restart: on-failure
+    volumes:
+      - ./.run/.nginx/nginx.conf:/etc/nginx/nginx.conf
+      - ./nginx/data/certbot/conf:/etc/letsencrypt
+      - ./nginx/data/certbot/www:/var/www/certbot
+    ports:
+      - 80:80
+      - 443:443
+    command: "/bin/sh -c 'while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g \"daemon off;\"'"
+    networks:
+      zero_chamber_net:
+      pokus_rstudio_net:
+        aliases:
+          - nginx.pokus.io
+    extra_hosts:
+      - "user1_rstudio.pokus.io:${DOCK_HOST_IP_ADDR}"
+      - "user2_rstudio.pokus.io:${DOCK_HOST_IP_ADDR}"
+    depends_on:
+      # ---
+      # There will always be at least one 
+      # RStudio Running : The reverse proxy will
+      #  depend one that first one.
+      # TODO: add a custom health check in NGINX for all static instances
+      # TODO-next: we need dynamic reverse proxy like traefik (or the well known https://github.com/nginx-proxy/docker-gen nginx module and https://github.com/nginx-proxy/nginx-proxy )
+      # TODO-next: and we need a basic monitoring, the standards monitorign for the reverse proxy, for the Docker Compose host, like checking the host sys usage CPU mem disk etc..., as well as Docker Containers metrics, all that on prometheus 
+      - rstudio_user1
+    env_file:
+      - ./.env
+
+
+
+
+  certbot:
+    image: certbot/certbot
+    container_name: certbot
+    restart: on-failure
+    volumes:
+      - ./data/certbot/conf:/etc/letsencrypt
+      - ./data/certbot/www:/var/www/certbot
+    entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
+
+
+  # --- # --- # --- # --- # --- #
+  # # --- # --- # --- # --- #
+  # # Postgres DB for R-Studio players
+  rstudio_players_db:
+    image: postgres:14.1-alpine
+    restart: always
+    environment:
+      - POSTGRES_USER=${RSTUDIO_PLYRS_DB_USERNAME}
+      - POSTGRES_PASSWORD=${RSTUDIO_PLYRS_DB_PASSWORD}
+      # - POSTGRES_DB=${CB_DB_NAME}
+    expose:
+      - '5432'
+    ports:
+      - '5432:5432'
+    volumes: 
+      - rstudio-players-db:/var/lib/postgresql/data
+      - ./init-chartbrew-db.sql:/docker-entrypoint-initdb.d/init-chartbrew-db.sql
+    env_file:
+      - ./.env
+    networks:
+      pokus_rstudio_net:
+        aliases:
+          - rstudio_players_db.pokus.io
+
+  # rstudio:
+  rstudio_user1:
+    <<: *rstudio-common
+    # container_name: rstudio
+    container_name: rstudio_user1
+    volumes:
+      - type: volume
+        # source: rstudio
+        source: user1_rstudio_home
+        target: /home/rstudio
+        volume:
+          no-copy: true
+      - type: bind
+        # source: ./projects
+        source: user1_rstudio_projects
+        target: /home/rstudio/projects
+      - type: volume
+        # source: r_libs
+        source: user1_r_libs
+        target: /usr/local/lib/R
+        volume:
+          no-copy: true
+    networks:
+      pokus_rstudio_net:
+        aliases:
+          - user1_rstudio.pokus.io
+    env_file: ./.env
+    environment:
+      - PASSWORD=${RSTUDIO_USER1_PWD}
+    expose:
+      - ${RSTUDIO_PORT}
+
+
+
+networks:
+  # --- # --- # --- # --- # --- # --- # --- # --- #
+  # zero chamber is the network users
+  # hit to HTTP query Chartbrew Web UI
+  # --- # --- # --- # --- # --- # --- # --- # --- #
+  zero-chamber-net:
+    name: zero_chamber_net
+  # --- # --- # --- # --- # --- # --- # --- # --- #
+  # Users cannot access postgres at all, not
+  # even through the reverse proxy 
+  # Users can access both chartbrew frontend 
+  # and backend, but only through reverse proxy
+  # --- # --- # --- # --- # --- # --- # --- # --- #
+  # 
+  # --- # --- # --- # --- # --- # --- # --- # --- #
+  pokus-rstudio-net:
+    name: pokus_rstudio_net
+    internal: true
+
+# volumes:
+  # # --- # --- 
+  # # --- R-Studio Single User 
+  # r_libs:
+  # rstudio:
+volumes:
+  # --- R-Studio User 1 
+  user1_r_libs:
+  user1_rstudio_home:
+  user1_rstudio_projects:
+  # --- R-Studio User 1 
+  user2_r_libs:
+  user2_rstudio_home:
+  user2_rstudio_projects:
+  # --- R-Studio Users Postgres DB
+  rstudio-players-db:

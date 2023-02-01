@@ -1,0 +1,8 @@
+stages:
+  - build-vm-image
+  - terraform-infra
+
+variables:
+  TERRAFORM_VERSION: 1.3.6
+  PACKER_VERSION: 1.8.5
+
