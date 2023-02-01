@@ -108,6 +108,9 @@ The piece of infrastructure we are going to deliver, is a production environment
     * traefik: 
       * usual references to find
   * Docker Compose Cert Bot : usual references to find
+  * NGINX and OpenID Connect with Keycloak : 
+    * https://developers.redhat.com/blog/2018/10/08/configuring-nginx-keycloak-oauth-oidc#configuring_keycloak_and_nginx
+    * https://github.com/zmartzone/lua-resty-openidc
 
 * About Cloud Storages which could be used to manage docker volumes : 
   * https://cloudinfrastructureservices.co.uk/azure-blob-storage-vs-aws-s3-which-is-better/
