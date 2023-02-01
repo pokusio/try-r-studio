@@ -104,6 +104,7 @@ The piece of infrastructure we are going to deliver, is a production environment
     * nginx: 
       * https://github.com/nginx-proxy/nginx-proxy
       * https://github.com/nginx-proxy/docker-gen
+      * https://github.com/agile6v/awesome-nginx
     * traefik: 
       * usual references to find
   * Docker Compose Cert Bot : usual references to find
