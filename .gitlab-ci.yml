@@ -1,6 +1,10 @@
 stages:
-  - build-vm-image
-  - terraform-infra
+  - iac-build-vm-images
+  - iac-terraform-mgmt-infra
+  - iac-terraform-infra
+  # k6 tests
+  # ansible molecule tests
+  - iac-e2e-tests
 
 variables:
   TERRAFORM_VERSION: 1.3.6

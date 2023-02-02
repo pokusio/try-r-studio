@@ -1,0 +1,43 @@
+version: '2.1'
+orbs:
+  # https://circleci.com/developer/orbs/orb/circleci/terraform#usage-deploy_infrastructure
+  terraform: circleci/terraform@3.1
+jobs:
+  single-job-lifecycle:
+    filters:
+    branches:
+      only:
+        - never
+    executor: terraform/default
+    steps:
+      - checkout
+      - run:
+          command: >-
+            echo "credentials \"app.terraform.io\" {token =
+            \"$TERRAFORM_TOKEN\"}" > $HOME/.terraformrc
+          name: Create .terraformrc file locally
+      - terraform/install:
+          arch: amd64
+          os: linux
+          terraform_version: 0.14.2
+      - terraform/fmt:
+          path: .
+      - terraform/validate:
+          path: .
+      - terraform/init:
+          backend: true
+          backend_config_file: backend.hcl
+          path: .
+      - terraform/plan:
+          backend_config_file: backend.hcl
+          path: .
+      - terraform/apply:
+          backend_config_file: backend.hcl
+          path: .
+      - terraform/destroy:
+          path: .
+    working_directory: ~/src
+workflows:
+  single-job-lifecycle:
+    jobs:
+      - single-job-lifecycle
