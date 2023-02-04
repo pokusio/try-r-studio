@@ -2,6 +2,18 @@
 
 Ok, our first step will be to bring up a working docker-compose to run R-Studio in a GNU/Linux Debian machine.
 
+
+## Run it
+
+```bash
+
+chmod +x ./rstudio/containers/.run/.prepare/.volumes.postgres-db.sh
+
+./rstudio/containers/.run/.prepare/.volumes.postgres-db.sh
+
+
+```
+
 ## Design thoughts
 
 ### Production-grade requirements

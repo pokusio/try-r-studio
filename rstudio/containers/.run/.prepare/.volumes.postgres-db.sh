@@ -13,6 +13,7 @@ createMountedVolumeDir () {
 }
 
 export R_STUDIO_DB_VOLUME_DIR=${R_STUDIO_DB_VOLUME_DIR:"$HOME/docker/volumes/postgres"}
+
 # --- # --- # --- # --- #
 # --- # --- # --- 
 # --- # --- 
@@ -40,3 +41,11 @@ export R_STUDIO_DB_VOLUME_DIR=${R_STUDIO_DB_VOLUME_DIR:"$HOME/docker/volumes/pos
 #     * and i found another blog post fully covering same subject from 2022 (i assume it worked in 2022) : https://medium.com/srcecde/mount-azure-file-storage-as-volume-on-docker-container-in-virtual-m-fc77a9fc5506
 # 
 createMountedVolumeDir "${R_STUDIO_DB_VOLUME_DIR}"
+
+export DEFAULT_CERTBOT_VOLUME=$(pwd)/rstudio/containers/.run/.certbot/data/certbot/
+# ./rstudio/containers/.run/.certbot/data/certbot/conf
+# ./rstudio/containers/.run/.certbot/data/certbot/www
+export CERTBOT__VOLUME_DIR=${CERTBOT__VOLUME_DIR:"${DEFAULT_CERTBOT_VOLUME}"}
+ 
+createMountedVolumeDir "${CERTBOT__VOLUME_DIR}/conf"
+createMountedVolumeDir "${CERTBOT__VOLUME_DIR}/www"

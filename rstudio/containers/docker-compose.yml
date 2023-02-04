@@ -1,10 +1,22 @@
 # ---
-# see : https://github.com/chartbrew/chartbrew#quickstart
+# see : 
+# 
+#  + https://towardsdatascience.com/docker-based-rstudio-postgresql-fbeefe8285bf
+#  + https://github.com/dceoy/docker-rstudio-server
+#  + https://github.com/TelethonKids/rstudio/blob/master/docker-compose.yml 
+#
+# ---
 version: '3.9'
 
 # Settings and configurations that are common for all R-tudio containers
 x-rstudio-common: &rstudio-common
   image: rocker/rstudio:4.0.3
+  # ---
+  # 
+  # [hatmatrix/blog:base] image uses a second network port, the 3838 port : we are not interested into that, it's about shinyapps.io a deployment option for apps developed using R-language
+  # 
+  # ---
+  # image: hatmatrix/blog:base
   # container_name: rstudio
   restart: on-failure
   env_file: ./.env
@@ -40,8 +52,8 @@ services:
     restart: on-failure
     volumes:
       - ./.run/.nginx/nginx.conf:/etc/nginx/nginx.conf
-      - ./nginx/data/certbot/conf:/etc/letsencrypt
-      - ./nginx/data/certbot/www:/var/www/certbot
+      - ./rstudio/containers/.run/.certbot/data/certbot/conf:/etc/letsencrypt
+      - ./rstudio/containers/.run/.certbot/data/certbot/www:/var/www/certbot
     ports:
       - 80:80
       - 443:443
@@ -68,14 +80,21 @@ services:
 
 
 
-
+  # --- 
+  # --- # --- #
+  # --- https://github.com/TelethonKids/rstudio#https-encryption
+  # --- 
+  # --- 
+  # --- https://pentacent.medium.com/nginx-and-lets-encrypt-with-docker-in-less-than-5-minutes-b4b8a60d3a71
+  # --- 
+  # --- # --- 
   certbot:
     image: certbot/certbot
     container_name: certbot
     restart: on-failure
     volumes:
-      - ./data/certbot/conf:/etc/letsencrypt
-      - ./data/certbot/www:/var/www/certbot
+      - ./rstudio/containers/.run/.certbot/data/certbot/conf:/etc/letsencrypt
+      - ./rstudio/containers/.run/.certbot/data/certbot/www:/var/www/certbot
     entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
 
 
@@ -94,8 +113,9 @@ services:
     ports:
       - '5432:5432'
     volumes: 
-      - rstudio-players-db:/var/lib/postgresql/data
-      - ./init-chartbrew-db.sql:/docker-entrypoint-initdb.d/init-chartbrew-db.sql
+      - rstudio-players-db-data:/var/lib/postgresql/data
+      - ./rstudio/containers/.run/.prepare/init-rstudio-workspace-dbs.sql:/docker-entrypoint-initdb.d/init-chartbrew-db.sql
+      # - ./init-chartbrew-db.sql:/docker-entrypoint-initdb.d/init-chartbrew-db.sql
     env_file:
       - ./.env
     networks:
@@ -162,6 +182,8 @@ networks:
   # r_libs:
   # rstudio:
 volumes:
+  # - - 
+  # user*_r_libs volumes require an [init_r_lib] init container, or a custom docker image build for eah user different, even for each project
   # --- R-Studio User 1 
   user1_r_libs:
   user1_rstudio_home:
@@ -171,4 +193,4 @@ volumes:
   user2_rstudio_home:
   user2_rstudio_projects:
   # --- R-Studio Users Postgres DB
-  rstudio-players-db:
+  rstudio-players-db-data:
