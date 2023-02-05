@@ -148,8 +148,9 @@ if [ $staging != "0" ]; then staging_arg="--staging"; fi
 #     --webroot -w /var/www/certbot \
 # --- 
 # 
-
-
+# https://eff-certbot.readthedocs.io/en/stable/using.html
+# 
+# 
 
 ####################################
 
