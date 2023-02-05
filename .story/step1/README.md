@@ -9,9 +9,9 @@ Ok, our first step will be to bring up a working docker-compose to run R-Studio 
 
 cd ./rstudio/containers/
 
-chmod +x ./.run/.prepare/.prepare.sh
+chmod +x ./.prepare/.prepare.sh
 
-./.run/.prepare/.prepare.sh
+./.prepare/.prepare.sh
 
 docker-compose up -d
 
