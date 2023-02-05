@@ -1,5 +1,11 @@
-# create directory if does not exist
+#!/bin/bash
 
+export R_STUDIO_STACK_VOLUMES_HOME=${R_STUDIO_STACK_VOLUMES_HOME:"${HOME}/.rstudio/.run/.volumes"}
+export R_STUDIO_DB_VOLUME_DIR=${R_STUDIO_DB_VOLUME_DIR:"${R_STUDIO_STACK_VOLUMES_HOME}/postgres"}
+
+# --- 
+# 
+# create directory if does not exist
 createMountedVolumeDir () {
     export PROVIDED_PATH_ARG=$1
     echo "PROVIDED_PATH_ARG=[${PROVIDED_PATH_ARG}]"
@@ -12,7 +18,6 @@ createMountedVolumeDir () {
     fi
 }
 
-export R_STUDIO_DB_VOLUME_DIR=${R_STUDIO_DB_VOLUME_DIR:"$HOME/docker/volumes/postgres"}
 
 # --- # --- # --- # --- #
 # --- # --- # --- 
