@@ -2,6 +2,10 @@
 
 export R_STUDIO_STACK_VOLUMES_HOME=${R_STUDIO_STACK_VOLUMES_HOME:"${HOME}/.rstudio/.run/.volumes"}
 export R_STUDIO_DB_VOLUME_DIR=${R_STUDIO_DB_VOLUME_DIR:"${R_STUDIO_STACK_VOLUMES_HOME}/postgres"}
+echo "# --- "
+echo "# --- R_STUDIO_STACK_VOLUMES_HOME=[${R_STUDIO_STACK_VOLUMES_HOME}]"
+echo "# --- R_STUDIO_DB_VOLUME_DIR=[${R_STUDIO_DB_VOLUME_DIR}]"
+echo "# --- "
 
 # --- 
 # 
