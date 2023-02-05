@@ -147,9 +147,6 @@ if [ $staging != "0" ]; then staging_arg="--staging"; fi
 # 
 
 docker-compose run --rm --entrypoint "\
-  echo && \
-  echo '[cat ~/.config/letsencrypt/cli.ini] : ' && \
-  echo && \
   certbot certonly \
     --manual \
     --preferred-challenges dns \
