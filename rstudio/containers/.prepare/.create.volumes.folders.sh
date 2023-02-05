@@ -1,11 +1,15 @@
 #!/bin/bash
 
-export R_STUDIO_STACK_VOLUMES_HOME=${R_STUDIO_STACK_VOLUMES_HOME:"${HOME}/.rstudio/.run/.volumes"}
-export R_STUDIO_DB_VOLUME_DIR=${R_STUDIO_DB_VOLUME_DIR:"${R_STUDIO_STACK_VOLUMES_HOME}/postgres"}
+export R_STUDIO_NGINX_VOLUME_DIR="$(pwd)/.run/.nginx"
+export R_STUDIO_CERTBOT_VOLUMES_HOME="$(pwd)/.run/.certbot/data/certbot"
+# $PWD/.run/.nginx/
+# $PWD/.run/.certbot/data/certbot/conf
+# $PWD/.run/.certbot/data/certbot/www
 echo "# --- "
-echo "# --- R_STUDIO_STACK_VOLUMES_HOME=[${R_STUDIO_STACK_VOLUMES_HOME}]"
-echo "# --- R_STUDIO_DB_VOLUME_DIR=[${R_STUDIO_DB_VOLUME_DIR}]"
+echo "# --- R_STUDIO_NGINX_VOLUME_DIR=[${R_STUDIO_NGINX_VOLUME_DIR}]"
+echo "# --- R_STUDIO_CERTBOT_VOLUMES_HOME=[${R_STUDIO_CERTBOT_VOLUMES_HOME}]"
 echo "# --- "
+
 
 # --- 
 # 
@@ -49,12 +53,6 @@ createMountedVolumeDir(){
 #     * this one and only azure driver i found was still recommended even if source code archived, by official docker team https://social.msdn.microsoft.com/Forums/en-US/e7d2b06a-0073-4cbd-aad1-4f3de9ce52c2/how-to-mount-a-volume-in-dockerfile-to-azure-storage-file?forum=windowsazuredata
 #     * and i found another blog post fully covering same subject from 2022 (i assume it worked in 2022) : https://medium.com/srcecde/mount-azure-file-storage-as-volume-on-docker-container-in-virtual-m-fc77a9fc5506
 # 
-createMountedVolumeDir "${R_STUDIO_DB_VOLUME_DIR}"
-
-export DEFAULT_CERTBOT_VOLUME=$(pwd)/rstudio/containers/.run/.certbot/data/certbot/
-# ./rstudio/containers/.run/.certbot/data/certbot/conf
-# ./rstudio/containers/.run/.certbot/data/certbot/www
-export CERTBOT_VOLUME_DIR=${CERTBOT_VOLUME_DIR:"${DEFAULT_CERTBOT_VOLUME}"}
- 
-createMountedVolumeDir "${CERTBOT_VOLUME_DIR}/conf"
-createMountedVolumeDir "${CERTBOT_VOLUME_DIR}/www"
+createMountedVolumeDir "${R_STUDIO_NGINX_VOLUME_DIR}"
+createMountedVolumeDir "${R_STUDIO_CERTBOT_VOLUMES_HOME}/conf"
+createMountedVolumeDir "${R_STUDIO_CERTBOT_VOLUMES_HOME}/www"
