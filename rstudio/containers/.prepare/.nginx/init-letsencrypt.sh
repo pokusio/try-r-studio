@@ -63,6 +63,7 @@ for domain in "${domains[@]}"; do
   cert_home_path="/etc/letsencrypt/live/$domain"
   mkdir -p "$data_path/conf/live/$domain"
   docker-compose run --rm --entrypoint "\
+    echo '# -- cert_home_path = [$cert_home_path]'  \
     mkdir -p $cert_home_path \
     openssl req -x509 -nodes -newkey rsa:$rsa_key_size -days 1\
       -keyout '$cert_home_path/privkey.pem' \
