@@ -130,6 +130,10 @@ docker-compose run --rm --entrypoint "\
   echo \
   echo '[cat ~/.config/letsencrypt/cli.ini] : ' \
   echo \
+  ls -alh ~/.config/ \
+  ls -alh ~/.config/letsencrypt/ \
+  ls -alh ~/.config/letsencrypt/*.ini \
+  ls -alh ~/.config/letsencrypt/cli.ini \
   cat ~/.config/letsencrypt/cli.ini \
   echo \
   certbot certonly \
