@@ -194,7 +194,7 @@ networks:
   # rstudio:
 volumes:
   # - - 
-  # user*_r_libs volumes require an [init_r_lib] init container, or a custom docker image build for eah user different, even for each project
+  # 'user*_r_libs' volumes require an [init_r_lib] init container, or a custom docker image build for eah user different, even for each project
   # --- R-Studio User 1 
   user1_r_libs:
   user1_rstudio_home:

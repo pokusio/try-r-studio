@@ -111,8 +111,26 @@ esac
 # Enable staging mode if needed
 if [ $staging != "0" ]; then staging_arg="--staging"; fi
 
+ 
+
+
+# --- # --- 
+# ---
+# 
+#  [certonly] means that we only want to generate but not install the certificate (we will do this manually later)
+#  
+#  # -- REMOVE THIS OPTION FOR DEPLOYMENTS WITH ACTUAL DNS REGISTERED IN PUBLIC INTERNET 
+#  [--manual] instructs Certbot to start an interactive dialogue where we can input all required data
+#  [--preferred-challenges] dns changes the challenge to use. By default, Certbot uses the HTTP-01 challenge, which we can’t use as I explained.
+# 
+# --- 
+# --- # --- 
+# 
 docker-compose run --rm --entrypoint "\
-  certbot certonly --webroot -w /var/www/certbot \
+  certbot certonly \
+    --manual \
+    --preferred-challenges dns \
+    --webroot -w /var/www/certbot \
     $staging_arg \
     $email_arg \
     $domain_args \
