@@ -173,7 +173,7 @@ networks:
   # zero chamber is the network users
   # hit to HTTP query Chartbrew Web UI
   # --- # --- # --- # --- # --- # --- # --- # --- #
-  zero-chamber-net:
+  zero_chamber_net:
     name: zero_chamber_net
   # --- # --- # --- # --- # --- # --- # --- # --- #
   # Users cannot access postgres at all, not
@@ -183,7 +183,7 @@ networks:
   # --- # --- # --- # --- # --- # --- # --- # --- #
   # 
   # --- # --- # --- # --- # --- # --- # --- # --- #
-  pokus-rstudio-net:
+  pokus_rstudio_net:
     name: pokus_rstudio_net
     internal: true
 
