@@ -63,10 +63,13 @@ for domain in "${domains[@]}"; do
   cert_home_path="/etc/letsencrypt/live/$domain"
   mkdir -p "$data_path/conf/live/$domain"
   docker-compose run --rm --entrypoint "\
+    mkdir -p $cert_home_path \
     openssl req -x509 -nodes -newkey rsa:$rsa_key_size -days 1\
       -keyout '$cert_home_path/privkey.pem' \
       -out '$cert_home_path/fullchain.pem' \
-      -subj '/CN=localhost'" certbot
+      -subj '/CN=localhost' \
+      echo '# -- Content of [cert_home_path] after cert generation : ' \
+      ls -alh $cert_home_path/" certbot
   echo
 done
 
