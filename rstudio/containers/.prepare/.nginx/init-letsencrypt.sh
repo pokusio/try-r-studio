@@ -126,15 +126,25 @@ if [ $staging != "0" ]; then staging_arg="--staging"; fi
 # --- 
 # --- # --- 
 # 
+# 
+# ---
+# 
+# docker-compose run --rm --entrypoint "\
+#   echo && \
+#   echo '[cat ~/.config/letsencrypt/cli.ini] : ' && \
+#   echo && \
+#   ls -alh ~/.config/ && \
+#   ls -alh ~/.config/letsencrypt/ && \
+#   ls -alh ~/.config/letsencrypt/*.ini && \
+#   ls -alh ~/.config/letsencrypt/cli.ini && \
+#   cat ~/.config/letsencrypt/cli.ini && \
+# 
+# --- 
+# 
+
 docker-compose run --rm --entrypoint "\
   echo && \
   echo '[cat ~/.config/letsencrypt/cli.ini] : ' && \
-  echo && \
-  ls -alh ~/.config/ && \
-  ls -alh ~/.config/letsencrypt/ && \
-  ls -alh ~/.config/letsencrypt/*.ini && \
-  ls -alh ~/.config/letsencrypt/cli.ini && \
-  cat ~/.config/letsencrypt/cli.ini && \
   echo && \
   certbot certonly \
     --manual \
