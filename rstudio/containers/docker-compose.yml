@@ -1,10 +1,12 @@
 # ---
-# see : 
+# 
+#  See : 
 # 
 #  + https://towardsdatascience.com/docker-based-rstudio-postgresql-fbeefe8285bf
 #  + https://github.com/dceoy/docker-rstudio-server
 #  + https://github.com/TelethonKids/rstudio/blob/master/docker-compose.yml 
-#
+#  + https://github.com/wmnnd/nginx-certbot
+# 
 # ---
 version: '3.9'
 
@@ -52,36 +54,40 @@ services:
     restart: on-failure
     volumes:
       - ./.run/.nginx/nginx.conf:/etc/nginx/nginx.conf
-      - ./rstudio/containers/.run/.certbot/data/certbot/conf:/etc/letsencrypt
-      - ./rstudio/containers/.run/.certbot/data/certbot/www:/var/www/certbot
+      - ./.run/.certbot/data/certbot/conf:/etc/letsencrypt
+      - ./.run/.certbot/data/certbot/www:/var/www/certbot
     ports:
       - 80:80
       - 443:443
+    # ---
+    # This makes nginx reload its configuration (and certificates) every six hours in the background and launches nginx in the foreground.
     command: "/bin/sh -c 'while :; do sleep 6h & wait $${!}; nginx -s reload; done & nginx -g \"daemon off;\"'"
     networks:
       zero_chamber_net:
+        # aliases:
+          # - rstudio.pokus.io
       pokus_rstudio_net:
         aliases:
           - nginx.pokus.io
     extra_hosts:
       - "user1_rstudio.pokus.io:${DOCK_HOST_IP_ADDR}"
       - "user2_rstudio.pokus.io:${DOCK_HOST_IP_ADDR}"
-    depends_on:
-      # ---
-      # There will always be at least one 
-      # RStudio Running : The reverse proxy will
-      #  depend one that first one.
-      # TODO: add a custom health check in NGINX for all static instances
-      # TODO-next: we need dynamic reverse proxy like traefik (or the well known https://github.com/nginx-proxy/docker-gen nginx module and https://github.com/nginx-proxy/nginx-proxy )
-      # TODO-next: and we need a basic monitoring, the standards monitorign for the reverse proxy, for the Docker Compose host, like checking the host sys usage CPU mem disk etc..., as well as Docker Containers metrics, all that on prometheus 
-      - rstudio_user1
+    # depends_on:
+      # # ---
+      # # There will always be at least one 
+      # # RStudio Running : The reverse proxy will
+      # #  depend one that first one.
+      # # TODO: add a custom health check in NGINX for all static instances
+      # # TODO-next: we need dynamic reverse proxy like traefik (or the well known https://github.com/nginx-proxy/docker-gen nginx module and https://github.com/nginx-proxy/nginx-proxy )
+      # # TODO-next: and we need a basic monitoring, the standards monitorign for the reverse proxy, for the Docker Compose host, like checking the host sys usage CPU mem disk etc..., as well as Docker Containers metrics, all that on prometheus 
+      # - rstudio_user1
     env_file:
       - ./.env
 
 
 
-  # --- 
   # --- # --- #
+  # --- # --- # --- #
   # --- https://github.com/TelethonKids/rstudio#https-encryption
   # --- 
   # --- 
@@ -93,10 +99,9 @@ services:
     container_name: certbot
     restart: on-failure
     volumes:
-      - ./rstudio/containers/.run/.certbot/data/certbot/conf:/etc/letsencrypt
-      - ./rstudio/containers/.run/.certbot/data/certbot/www:/var/www/certbot
+      - ./.run/.certbot/data/certbot/conf:/etc/letsencrypt
+      - ./.run/.certbot/data/certbot/www:/var/www/certbot
     entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
-
 
   # --- # --- # --- # --- # --- #
   # # --- # --- # --- # --- #
@@ -114,7 +119,7 @@ services:
       - '5432:5432'
     volumes: 
       - rstudio-players-db-data:/var/lib/postgresql/data
-      - ./rstudio/containers/.run/.prepare/init-rstudio-workspace-dbs.sql:/docker-entrypoint-initdb.d/init-chartbrew-db.sql
+      - ./.run/.prepare/init-rstudio-workspace-dbs.sql:/docker-entrypoint-initdb.d/init-chartbrew-db.sql
       # - ./init-chartbrew-db.sql:/docker-entrypoint-initdb.d/init-chartbrew-db.sql
     env_file:
       - ./.env

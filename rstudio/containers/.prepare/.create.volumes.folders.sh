@@ -45,7 +45,7 @@ createMountedVolumeDir "${R_STUDIO_DB_VOLUME_DIR}"
 export DEFAULT_CERTBOT_VOLUME=$(pwd)/rstudio/containers/.run/.certbot/data/certbot/
 # ./rstudio/containers/.run/.certbot/data/certbot/conf
 # ./rstudio/containers/.run/.certbot/data/certbot/www
-export CERTBOT__VOLUME_DIR=${CERTBOT__VOLUME_DIR:"${DEFAULT_CERTBOT_VOLUME}"}
+export CERTBOT_VOLUME_DIR=${CERTBOT_VOLUME_DIR:"${DEFAULT_CERTBOT_VOLUME}"}
  
-createMountedVolumeDir "${CERTBOT__VOLUME_DIR}/conf"
-createMountedVolumeDir "${CERTBOT__VOLUME_DIR}/www"
+createMountedVolumeDir "${CERTBOT_VOLUME_DIR}/conf"
+createMountedVolumeDir "${CERTBOT_VOLUME_DIR}/www"

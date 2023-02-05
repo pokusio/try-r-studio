@@ -7,10 +7,13 @@ Ok, our first step will be to bring up a working docker-compose to run R-Studio 
 
 ```bash
 
-chmod +x ./rstudio/containers/.run/.prepare/.volumes.postgres-db.sh
+cd ./rstudio/containers/
 
-./rstudio/containers/.run/.prepare/.volumes.postgres-db.sh
+chmod +x ./.run/.prepare/.prepare.sh
 
+./.run/.prepare/.prepare.sh
+
+docker-compose up -d
 
 ```
 
