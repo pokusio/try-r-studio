@@ -140,7 +140,8 @@ services:
     networks:
       pokus_rstudio_net:
         aliases:
-          - user1_rstudio.pokus.io
+          # - user1_rstudio.pokus.io
+          - rstudio.pokus.io
     env_file: ./.env
     environment:
       - PASSWORD=${RSTUDIO_USER1_PWD}
