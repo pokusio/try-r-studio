@@ -142,22 +142,53 @@ if [ $staging != "0" ]; then staging_arg="--staging"; fi
 #   ls -alh ~/.config/letsencrypt/*.ini && \
 #   ls -alh ~/.config/letsencrypt/cli.ini && \
 #   cat ~/.config/letsencrypt/cli.ini && \
-# 
+#   certbot certonly \
+#    --manual \
+#     --preferred-challenges dns \
+#     --webroot -w /var/www/certbot \
 # --- 
 # 
 
-docker-compose run --rm --entrypoint "\
-  certbot certonly \
-    --manual \
-    --preferred-challenges dns \
-    --webroot -w /var/www/certbot \
-    $staging_arg \
-    $email_arg \
-    $domain_args \
-    --rsa-key-size $rsa_key_size \
-    --agree-tos \
-    --force-renewal" certbot
-echo
+
+
+####################################
+
+
+
+for domain in "${domains[@]}"; do
+  cert_home_path="/etc/letsencrypt/live/$domain"
+  mkdir -p "$data_path/conf/live/$domain"
+  docker-compose run --rm --entrypoint "\
+    certbot certonly \
+      --manual \
+      --preferred-challenges dns \
+      $staging_arg \
+      $email_arg \
+      $domain_args \
+      --rsa-key-size $rsa_key_size \
+      --agree-tos \
+      --force-renewal" certbot
+  echo
+done
+
+
+
+
+
+
+##############################
+
+# docker-compose run --rm --entrypoint "\
+#   certbot certonly \
+#     --manual \
+#     --preferred-challenges dns \
+#     $staging_arg \
+#     $email_arg \
+#     $domain_args \
+#     --rsa-key-size $rsa_key_size \
+#     --agree-tos \
+#     --force-renewal" certbot
+# echo
 
 echo "### Reloading nginx ..."
 docker-compose exec nginx nginx -s reload
