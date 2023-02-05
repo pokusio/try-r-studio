@@ -134,28 +134,9 @@ services:
     # container_name: rstudio
     container_name: rstudio_user1
     volumes:
-      - type: volume
-        # source: rstudio
-        source: user1_rstudio_home
-        target: /home/rstudio
-        # ---
-        # #  Additional property no-copy is not allowed
-        # 
-        # volume:
-          # no-copy: true
-      - type: bind
-        # source: ./projects
-        source: user1_rstudio_projects
-        target: /home/rstudio/projects
-      - type: volume
-        # source: r_libs
-        source: user1_r_libs
-        target: /usr/local/lib/R
-        # ---
-        # #  Additional property no-copy is not allowed
-        # 
-        # volume:
-          # no-copy: true
+      - user1_rstudio_home:/home/rstudio
+      - user1_rstudio_projects:/home/rstudio/projects
+      - user1_r_libs:/usr/local/lib/R
     networks:
       pokus_rstudio_net:
         aliases:
