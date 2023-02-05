@@ -119,7 +119,7 @@ services:
       - '5432:5432'
     volumes: 
       - rstudio-players-db-data:/var/lib/postgresql/data
-      - ./.run/.prepare/init-rstudio-workspace-dbs.sql:/docker-entrypoint-initdb.d/init-chartbrew-db.sql
+      - ./.run/.prepare/init-rstudio-workspace-dbs.sql:/docker-entrypoint-initdb.d/init-rstudio-workspace-dbs.sql
       # - ./init-chartbrew-db.sql:/docker-entrypoint-initdb.d/init-chartbrew-db.sql
     env_file:
       - ./.env
