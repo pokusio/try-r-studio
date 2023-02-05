@@ -161,7 +161,7 @@ for domain in "${domains[@]}"; do
   docker-compose run --rm --entrypoint "\
     certbot certonly \
       --manual \
-      --preferred-challenges dns \
+      --preferred-challenges=tls-sni-01,http,dns \
       $staging_arg \
       $email_arg \
       $domain_args \
@@ -180,8 +180,7 @@ done
 
 # docker-compose run --rm --entrypoint "\
 #   certbot certonly \
-#     --manual \
-#     --preferred-challenges dns \
+#     --webroot -w /var/www/certbot \
 #     $staging_arg \
 #     $email_arg \
 #     $domain_args \
