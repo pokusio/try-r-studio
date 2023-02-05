@@ -6,7 +6,7 @@ export R_STUDIO_DB_VOLUME_DIR=${R_STUDIO_DB_VOLUME_DIR:"${R_STUDIO_STACK_VOLUMES
 # --- 
 # 
 # create directory if does not exist
-createMountedVolumeDir () {
+createMountedVolumeDir(){
     export PROVIDED_PATH_ARG=$1
     echo "PROVIDED_PATH_ARG=[${PROVIDED_PATH_ARG}]"
     if [ -d "${PROVIDED_PATH_ARG}" ] 
