@@ -2,7 +2,7 @@
 
 createMountedVolumeDir () {
     export PROVIDED_PATH_ARG=$1
-    echo "PROVIDED_PATH_ARG"
+    echo "PROVIDED_PATH_ARG=[${PROVIDED_PATH_ARG}]"
     if [ -d "${PROVIDED_PATH_ARG}" ] 
     then
         echo "Directory [${PROVIDED_PATH_ARG}] exists." 
