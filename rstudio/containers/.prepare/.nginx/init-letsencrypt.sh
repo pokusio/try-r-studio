@@ -12,14 +12,14 @@ domains=(${POKUS_DOMAINS})
 export POKUS_TLS_CERTS_KEYS_RSA_SIZE=4096
 rsa_key_size=${POKUS_TLS_CERTS_KEYS_RSA_SIZE}
 
-
-# data_path="./data/certbot"
-export DEFAULT_CERTBOT_VOLUME=$(pwd)/rstudio/containers/.run/.certbot/data/certbot/
+# export R_STUDIO_NGINX_VOLUME_DIR="$(pwd)/.run/.nginx"
+export R_STUDIO_CERTBOT_VOLUMES_HOME="$(pwd)/.run/.certbot/data/certbot"
 # ./rstudio/containers/.run/.certbot/data/certbot/conf
 # ./rstudio/containers/.run/.certbot/data/certbot/www
-export CERTBOT_VOLUME_DIR=${CERTBOT_VOLUME_DIR:"${DEFAULT_CERTBOT_VOLUME}"}
- 
-data_path="${CERTBOT_VOLUME_DIR}"
+
+
+# data_path="./data/certbot"
+data_path="${R_STUDIO_CERTBOT_VOLUMES_HOME}"
 
 # email="" # Adding a valid address is strongly recommended
 export POKUS_TLS_CERTS_EMAIL="jean.baptiste.lasselle@gmail.com"
