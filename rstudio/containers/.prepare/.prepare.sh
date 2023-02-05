@@ -6,6 +6,6 @@ chmod +x ./.prepare/.create.volumes.folders.sh
 ./.prepare/.create.volumes.folders.sh
 # ./.certbot/
 chmod +x ./.prepare/.nginx/init-letsencrypt.sh
-./.prepare/.nginx/init-letsencrypt.sh
+sudo ./.prepare/.nginx/init-letsencrypt.sh
 # ./.postgres.db/
 # ./.rstudio/
