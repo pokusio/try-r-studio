@@ -138,8 +138,11 @@ services:
         # source: rstudio
         source: user1_rstudio_home
         target: /home/rstudio
-        volume:
-          no-copy: true
+        # ---
+        # #  Additional property no-copy is not allowed
+        # 
+        # volume:
+          # no-copy: true
       - type: bind
         # source: ./projects
         source: user1_rstudio_projects
@@ -148,8 +151,11 @@ services:
         # source: r_libs
         source: user1_r_libs
         target: /usr/local/lib/R
-        volume:
-          no-copy: true
+        # ---
+        # #  Additional property no-copy is not allowed
+        # 
+        # volume:
+          # no-copy: true
     networks:
       pokus_rstudio_net:
         aliases:
